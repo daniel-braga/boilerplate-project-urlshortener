@@ -54,6 +54,7 @@ app.post('/api/shorturl', function(req, res) {
   let parsedURL = null;
   try {
     parsedURL = new URL(url);
+    if (parsedURL.protocol !== 'http' && parsedURL.protocol != 'https') throw new Error();
   } catch (e) {
     return res.json({"error": "invalid url"});
   }
