@@ -52,9 +52,10 @@ app.get('/', function(req, res) {
 app.post('/api/shorturl', function(req, res) {
   let url = req.body.url;
   let parsedURL = null;
+  console.log("URL = " + url);
   try {
     parsedURL = new URL(url);
-    if (parsedURL.protocol !== 'http' && parsedURL.protocol != 'https') throw new Error();
+    if (parsedURL.protocol !== 'http:' && parsedURL.protocol !== 'https:') throw new Error();
   } catch (e) {
     return res.json({"error": "invalid url"});
   }
@@ -82,6 +83,15 @@ app.post('/api/shorturl', function(req, res) {
 });
 
 app.get('/api/shorturl/:short_url', function(req, res) {
+  let short_url = null;
+  try {
+    short_url = parseInt(req.params.short_url);
+  }
+  catch (e) {
+    return res.json({"error": "No short URL found for the given input"});
+  }
+
+  console.log("Short URL = " + req.params.short_url);
   findByShortUrl(req.params.short_url, (error, model) => {
     if (error) return res.json({"error": error});
     if (model) {
