@@ -51,8 +51,12 @@ app.get('/', function(req, res) {
 
 app.post('/api/shorturl', function(req, res) {
   let url = req.body.url;
-  let parsedURL = new URL(url);
-
+  let parsedURL = null;
+  try {
+    parsedURL = new URL(url);
+  } catch (e) {
+    return res.json({"error": "invalid url"});
+  }
   dns.lookup(parsedURL.hostname, (err, address, family) => {
     if (err) return res.json({"error": "invalid url"});
 
